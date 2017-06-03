@@ -1,5 +1,8 @@
-﻿using System;
+﻿using RestSharp;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static AutoClientApplication.Utils;
 
@@ -24,20 +27,6 @@ namespace AutoClientApplication {
             directoryLabel.ReadOnly = true;
         }
 
-        private void AssignDefaultValues() {
-            refreshRate = new TimeSpan(0);
-            rateValueLabel.Text = SecondsToHours(refreshRate);
-            stopButton.Enabled = false;
-            startButton.Enabled = false;
-            clearLogsButton.Enabled = false;
-            clearMonitorsButton.Enabled = false;
-            topButton.Enabled = false;
-            top10Machines.Rows.Clear();
-            monitorsGridView.Rows.Clear();
-            directoryLabel.Text = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + DEFAULT_MONITOR_FILENAME;
-            resultsTextBox.Text = "";
-        }
-
         private void Form1_Load(object sender, EventArgs e) {}
 
         private void TopButton_Click(object sender, EventArgs e) {
@@ -50,21 +39,29 @@ namespace AutoClientApplication {
         }
 
         private void StartButton_Click(object sender, EventArgs e) {
+            AssignUiAfterStartButton();
             AddNewInfo("Application started.");
-            stopButton.Enabled = true;
-            startButton.Enabled = false;
-            topButton.Enabled = true;
-            clearMonitorsButton.Enabled = false;
-            loadMonitorsButton.Enabled = false;
+            DownloadDataFromAllMonitors();
+        }
+
+        private void DownloadDataFromAllMonitors() {
+            for (int monitorIndex = 0; monitorIndex < monitorsGridView.RowCount; monitorIndex++)
+                GetSensors(GetMonitorAddress(monitorIndex));
+        }
+
+        private static void UpdateSensorValues(List<Sensor> sensors) {
+            throw new NotImplementedException();
+        }
+
+        private static async void GetSensors(string address) {
+            var listOfSensors = await SensorsRestDownloader.GetSensorsAsync<List<Sensor>>(address);
+            if (listOfSensors.Data.Count > 0)
+                UpdateSensorValues(listOfSensors.Data);
         }
 
         private void StopButton_Click(object sender, EventArgs e) {
+            AssignUiAfterStopButton();
             AddNewInfo("Application stopped.");
-            stopButton.Enabled = false;
-            startButton.Enabled = true;
-            topButton.Enabled = false;
-            clearMonitorsButton.Enabled = true;
-            loadMonitorsButton.Enabled = true;
         }
 
         private void AddNewInfo(string info) {
@@ -125,8 +122,6 @@ namespace AutoClientApplication {
                 AddNewInfo("Empty Monitor deleted");
             monitorsGridView.Rows.RemoveAt(rowIndex);
 
- 
-
             if (monitorsGridView.Rows.Count == 0) {
                 startButton.Enabled = false;
                 clearMonitorsButton.Enabled = false;
@@ -167,7 +162,7 @@ namespace AutoClientApplication {
             startButton.Enabled = false;
         }
 
-        private void TrackBar1_Scroll(object sender, EventArgs e) {
+        private void RefreshRateTackBarOnValueChange(object sender, EventArgs e) {
             refreshRate = TimeSpan.FromSeconds(trackBar1.Value);
             rateValueLabel.Text = SecondsToHours(refreshRate);
         }
@@ -190,6 +185,36 @@ namespace AutoClientApplication {
             saveFileDialog1.Filter = "Data files|*.dat|Text files|*.txt";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 File.WriteAllText(saveFileDialog1.FileName, PrepereMonitorAddressesForSave());
+        }
+
+        private void AssignDefaultValues() {
+            refreshRate = new TimeSpan(0);
+            rateValueLabel.Text = SecondsToHours(refreshRate);
+            stopButton.Enabled = false;
+            startButton.Enabled = false;
+            clearLogsButton.Enabled = false;
+            clearMonitorsButton.Enabled = false;
+            topButton.Enabled = false;
+            top10Machines.Rows.Clear();
+            monitorsGridView.Rows.Clear();
+            directoryLabel.Text = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + DEFAULT_MONITOR_FILENAME;
+            resultsTextBox.Text = "";
+        }
+
+        private void AssignUiAfterStartButton() {
+            stopButton.Enabled = true;
+            startButton.Enabled = false;
+            topButton.Enabled = true;
+            clearMonitorsButton.Enabled = false;
+            loadMonitorsButton.Enabled = false;
+        }
+
+        private void AssignUiAfterStopButton() {
+            stopButton.Enabled = false;
+            startButton.Enabled = true;
+            topButton.Enabled = false;
+            clearMonitorsButton.Enabled = true;
+            loadMonitorsButton.Enabled = true;
         }
     }
 }

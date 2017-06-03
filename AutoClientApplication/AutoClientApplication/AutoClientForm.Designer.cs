@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.resultsTextBox = new System.Windows.Forms.RichTextBox();
             this.topButton = new System.Windows.Forms.Button();
             this.InfoLabel = new System.Windows.Forms.Label();
@@ -70,7 +70,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.resultsTextBox.Location = new System.Drawing.Point(12, 767);
             this.resultsTextBox.Name = "resultsTextBox";
-            this.resultsTextBox.Size = new System.Drawing.Size(798, 152);
+            this.resultsTextBox.Size = new System.Drawing.Size(798, 0);
             this.resultsTextBox.TabIndex = 1;
             this.resultsTextBox.Text = "";
             // 
@@ -284,7 +284,7 @@
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(626, 45);
             this.trackBar1.TabIndex = 9;
-            this.trackBar1.Scroll += new System.EventHandler(this.TrackBar1_Scroll);
+            this.trackBar1.Scroll += new System.EventHandler(this.RefreshRateTackBarOnValueChange);
             // 
             // label3
             // 
@@ -359,8 +359,8 @@
             // 
             // Description
             // 
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Description.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Description.DefaultCellStyle = dataGridViewCellStyle1;
             this.Description.FillWeight = 120F;
             this.Description.HeaderText = "Description";
             this.Description.Name = "Description";
@@ -390,14 +390,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(822, 931);
+            this.ClientSize = new System.Drawing.Size(822, 733);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.clearLogsButton);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.InfoLabel);
             this.Controls.Add(this.resultsTextBox);
             this.MaximumSize = new System.Drawing.Size(838, 970);
-            this.MinimumSize = new System.Drawing.Size(837, 970);
+            this.MinimumSize = new System.Drawing.Size(837, 766);
             this.Name = "AutoClientForm";
             this.Text = "AutoClient";
             this.Load += new System.EventHandler(this.Form1_Load);
