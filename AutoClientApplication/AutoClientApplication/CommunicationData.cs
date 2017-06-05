@@ -1,23 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.Collections.Generic;
 
 namespace AutoClientApplication {
 
+    [Serializable]
     class ResourcesRespond {
-        public List<Resources> resources;
-        public Page page;
+        public List<ResourceRespond> resources;
+        public PageRespond page;
     }
 
-    class Resources {
+    [Serializable]
+    class ResourceRespond {
         public string id;
         public string name;
         public string description;
         public List<string> measurements;
     }
 
-    class Page {
+    [Serializable]
+    class PageRespond {
         public int size;
         public int number;
         public int totalCount;
     }
+
+    [Serializable]
+    public class MeasurementRespond {
+
+        public string host;
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MeasurementType metric;
+        public string unit;
+        public float maxValu;
+        public bool complex;
+        public string values;
+
+    }
+
+    [Serializable]
+    public class Values {
+
+        public float value;
+
+        [JsonConverter(typeof(SqlDateTimeConverter))]
+        public DateTime datatime;
+    }
+
 
 }

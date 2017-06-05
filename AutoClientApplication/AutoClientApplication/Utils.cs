@@ -4,6 +4,8 @@ namespace AutoClientApplication {
 
     class Utils {
 
+        public const string SQL_DATE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+
         public class Pair<T, U> {
             public Pair() {}
 

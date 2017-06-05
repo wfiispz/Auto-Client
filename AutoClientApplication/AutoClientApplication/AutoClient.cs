@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using RestSharp;
 using static AutoClientApplication.Utils;
+using System.Collections.Generic;
 
 namespace AutoClientApplication {
 
@@ -10,6 +12,8 @@ namespace AutoClientApplication {
         private const string DEFAULT_MONITOR_FILENAME = "Monitors.dat";
 
         private const string NEW_EMPTY_MONITOR_NAME = "-> Write Address Here <-";
+
+        private List<Resources> allResources = new List<Resources>();
 
         private TimeSpan refreshRate;
 
@@ -46,8 +50,20 @@ namespace AutoClientApplication {
                 GetMonitorResources(GetMonitorAddress(monitorIndex), GetMonitorUser(monitorIndex), GetMonitorPassword(monitorIndex));
         }
 
-        private static async void GetMonitorResources(string address, string user, string password) {
-            var resources = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password);
+        private async void GetMonitorResources(string address, string user, string password) {
+            var resources = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password, GetDataAsyncErrorCallback);
+            if (resources != null)
+                AssignNewResources(resources);
+            System.Threading.Thread.Sleep(refreshRate);
+            GetMonitorResources(address, user, password);
+        }
+
+        private void AssignNewResources(IRestResponse<ResourcesRespond> resources) {
+            foreach(var m)
+        }
+
+        private void GetDataAsyncErrorCallback(string errorMessage) {
+            AddNewInfo(errorMessage);
         }
 
         private void StopButton_Click(object sender, EventArgs e) {
