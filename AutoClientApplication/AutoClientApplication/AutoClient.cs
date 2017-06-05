@@ -1,14 +1,11 @@
-﻿using RestSharp;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static AutoClientApplication.Utils;
 
 namespace AutoClientApplication {
 
-    public partial class AutoClientForm : Form {
+    public partial class AutoClient : Form {
 
         private const string DEFAULT_MONITOR_FILENAME = "Monitors.dat";
 
@@ -16,7 +13,7 @@ namespace AutoClientApplication {
 
         private TimeSpan refreshRate;
 
-        public AutoClientForm() {
+        public AutoClient() {
             InitializeComponent();
             InitStartOption();
             AssignDefaultValues();
@@ -46,17 +43,11 @@ namespace AutoClientApplication {
 
         private void DownloadDataFromAllMonitors() {
             for (int monitorIndex = 0; monitorIndex < monitorsGridView.RowCount; monitorIndex++)
-                GetSensors(GetMonitorAddress(monitorIndex));
+                GetMonitorResources(GetMonitorAddress(monitorIndex), GetMonitorUser(monitorIndex), GetMonitorPassword(monitorIndex));
         }
 
-        private static void UpdateSensorValues(List<Sensor> sensors) {
-            throw new NotImplementedException();
-        }
-
-        private static async void GetSensors(string address) {
-            var listOfSensors = await SensorsRestDownloader.GetSensorsAsync<List<Sensor>>(address);
-            if (listOfSensors.Data.Count > 0)
-                UpdateSensorValues(listOfSensors.Data);
+        private static async void GetMonitorResources(string address, string user, string password) {
+            var resources = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password);
         }
 
         private void StopButton_Click(object sender, EventArgs e) {
@@ -82,17 +73,23 @@ namespace AutoClientApplication {
             StreamReader file = new StreamReader(directoryLabel.Text);
             string line = file.ReadLine();
             if (line == null) {
-                AddNewInfo("WARNING: FILE is empty. " + line);
+                AddNewInfo("WARNING: FILE is empty. " + directoryLabel.Text);
                 return;
             }
             while (line != null) {
-                if (!AnyRowContainsAddress(line)) {
-                    AddNewInfo("New monitor added to list: " + line);
+                var data = line.Split('$');
+                var address = data[0];
+                var user = data[1];
+                var password = data[2];
+                if (!AnyRowContainsAddress(address)) {
+                    AddNewInfo("New monitor added to list: " + address);
                     monitorsGridView.Rows.Add();
                     var id = monitorsGridView.Rows.Count - 1;
                     var currentRow = monitorsGridView.Rows[id];
                     currentRow.Cells["MonitorIndex"].Value = id + 1;
-                    currentRow.Cells["MonitorAddress"].Value = line;
+                    currentRow.Cells["MonitorAddress"].Value = address;
+                    currentRow.Cells["MonitorUser"].Value = user;
+                    currentRow.Cells["MonitorPassword"].Value = password;
                     currentRow.Cells["MonitorDelete"].Value = "X";
                     clearMonitorsButton.Enabled = true;
                     startButton.Enabled = true;
@@ -132,6 +129,14 @@ namespace AutoClientApplication {
             return (string)monitorsGridView.Rows[rowIndex].Cells["MonitorAddress"].Value;
         }
 
+        private string GetMonitorUser(int rowIndex) {
+            return (string)monitorsGridView.Rows[rowIndex].Cells["MonitorUser"].Value;
+        }
+
+        private string GetMonitorPassword(int rowIndex) {
+            return (string)monitorsGridView.Rows[rowIndex].Cells["MonitorPassword"].Value;
+        }
+
         private void RestartButton_Click(object sender, EventArgs e) {
             AssignDefaultValues();
         }
@@ -142,6 +147,8 @@ namespace AutoClientApplication {
             var currentRow = monitorsGridView.Rows[id];
             currentRow.Cells["MonitorIndex"].Value = id + 1;
             currentRow.Cells["MonitorAddress"].Value = NEW_EMPTY_MONITOR_NAME;
+            currentRow.Cells["MonitorUser"].Value = "User";
+            currentRow.Cells["MonitorPassword"].Value = "Password";
             currentRow.Cells["MonitorDelete"].Value = "X";
             clearMonitorsButton.Enabled = true;
             startButton.Enabled = true;
@@ -151,7 +158,9 @@ namespace AutoClientApplication {
         private string PrepereMonitorAddressesForSave() {
             var monitorAddresses = string.Empty;
             foreach (DataGridViewRow row in monitorsGridView.Rows)
-                monitorAddresses += (string)row.Cells["MonitorAddress"].Value + Environment.NewLine;
+                monitorAddresses += (string)row.Cells["MonitorAddress"].Value + "$" + 
+                                    (string)row.Cells["MonitorUser"].Value + "$" + 
+                                    (string)row.Cells["MonitorPassword"].Value + Environment.NewLine;
             return monitorAddresses;
         }
 

@@ -1,5 +1,5 @@
 ﻿namespace AutoClientApplication {
-    partial class AutoClientForm {
+    partial class AutoClient {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.resultsTextBox = new System.Windows.Forms.RichTextBox();
             this.topButton = new System.Windows.Forms.Button();
             this.InfoLabel = new System.Windows.Forms.Label();
@@ -32,9 +32,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.addMonitor = new System.Windows.Forms.Button();
             this.monitorsGridView = new System.Windows.Forms.DataGridView();
-            this.MonitorIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MonitorAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MonitorDelete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.SaveMonitorFile = new System.Windows.Forms.Button();
             this.OpenMonitorFile = new System.Windows.Forms.Button();
             this.clearMonitorsButton = new System.Windows.Forms.Button();
@@ -56,6 +53,11 @@
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.MonitorIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MonitorAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MonitorUser = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MonitorPassword = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MonitorDelete = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.monitorsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -156,6 +158,8 @@
             this.monitorsGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.MonitorIndex,
             this.MonitorAddress,
+            this.MonitorUser,
+            this.MonitorPassword,
             this.MonitorDelete});
             this.monitorsGridView.Location = new System.Drawing.Point(10, 218);
             this.monitorsGridView.Name = "monitorsGridView";
@@ -163,30 +167,6 @@
             this.monitorsGridView.Size = new System.Drawing.Size(772, 134);
             this.monitorsGridView.TabIndex = 39;
             this.monitorsGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.MonitorsGridView_CellContentClick_1);
-            // 
-            // MonitorIndex
-            // 
-            this.MonitorIndex.HeaderText = "Index";
-            this.MonitorIndex.Name = "MonitorIndex";
-            this.MonitorIndex.ReadOnly = true;
-            this.MonitorIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MonitorIndex.Width = 60;
-            // 
-            // MonitorAddress
-            // 
-            this.MonitorAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.MonitorAddress.HeaderText = "Monitor Address";
-            this.MonitorAddress.Name = "MonitorAddress";
-            this.MonitorAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.MonitorAddress.Width = 599;
-            // 
-            // MonitorDelete
-            // 
-            this.MonitorDelete.HeaderText = "Delete";
-            this.MonitorDelete.Name = "MonitorDelete";
-            this.MonitorDelete.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.MonitorDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.MonitorDelete.Width = 50;
             // 
             // SaveMonitorFile
             // 
@@ -359,8 +339,8 @@
             // 
             // Description
             // 
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Description.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Description.DefaultCellStyle = dataGridViewCellStyle2;
             this.Description.FillWeight = 120F;
             this.Description.HeaderText = "Description";
             this.Description.Name = "Description";
@@ -385,6 +365,39 @@
             // saveFileDialog1
             // 
             this.saveFileDialog1.FileName = "NewMonitorFile";
+            // 
+            // MonitorIndex
+            // 
+            this.MonitorIndex.HeaderText = "Index";
+            this.MonitorIndex.Name = "MonitorIndex";
+            this.MonitorIndex.ReadOnly = true;
+            this.MonitorIndex.Width = 60;
+            // 
+            // MonitorAddress
+            // 
+            this.MonitorAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.MonitorAddress.HeaderText = "Monitor Address";
+            this.MonitorAddress.Name = "MonitorAddress";
+            this.MonitorAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.MonitorAddress.Width = 399;
+            // 
+            // MonitorUser
+            // 
+            this.MonitorUser.HeaderText = "User";
+            this.MonitorUser.Name = "MonitorUser";
+            // 
+            // MonitorPassword
+            // 
+            this.MonitorPassword.HeaderText = "Password";
+            this.MonitorPassword.Name = "MonitorPassword";
+            // 
+            // MonitorDelete
+            // 
+            this.MonitorDelete.HeaderText = "Delete";
+            this.MonitorDelete.Name = "MonitorDelete";
+            this.MonitorDelete.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.MonitorDelete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.MonitorDelete.Width = 50;
             // 
             // AutoClientForm
             // 
@@ -443,10 +456,12 @@
         private System.Windows.Forms.Button SaveMonitorFile;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.DataGridView monitorsGridView;
+        private System.Windows.Forms.Button addMonitor;
         private System.Windows.Forms.DataGridViewTextBoxColumn MonitorIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn MonitorAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MonitorUser;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MonitorPassword;
         private System.Windows.Forms.DataGridViewButtonColumn MonitorDelete;
-        private System.Windows.Forms.Button addMonitor;
     }
 }
 

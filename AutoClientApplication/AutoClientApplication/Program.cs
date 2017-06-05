@@ -13,7 +13,7 @@ namespace AutoClientApplication {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AutoClientForm());
+            Application.Run(new AutoClient());
         }
     }
 }
