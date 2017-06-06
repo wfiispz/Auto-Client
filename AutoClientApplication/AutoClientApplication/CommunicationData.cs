@@ -16,7 +16,7 @@ namespace AutoClientApplication {
         public string id;
         public string name;
         public string description;
-        public List<string> measurements;
+        public List<string> measurementsGuids;
     }
 
     [Serializable]
@@ -33,14 +33,14 @@ namespace AutoClientApplication {
         [JsonConverter(typeof(StringEnumConverter))]
         public MeasurementType metric;
         public string unit;
-        public float maxValu;
+        public float maxValue;
         public bool complex;
         public string values;
 
     }
 
     [Serializable]
-    public class Values {
+    public class Value {
 
         public float value;
 

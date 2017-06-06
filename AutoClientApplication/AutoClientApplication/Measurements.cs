@@ -5,14 +5,14 @@ namespace AutoClientApplication {
 
     public enum MeasurementType { CPU, Network, Memory }
 
-    public class Measurement{
+    public class Measurement {
 
         public string host;
         public MeasurementType metric;
         public string unit;
-        public float maxValu;
+        public float maxValue;
         public bool complex;
-        public List<Values> values;
+        public List<Value> values;
 
     }
 }

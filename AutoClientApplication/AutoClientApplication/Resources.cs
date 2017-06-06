@@ -5,6 +5,6 @@ namespace AutoClientApplication {
         public string id;
         public string name;
         public string description;
-        public List<MeasurementRespond> measurements;
+        public List<Measurement> measurements;
     }
 }
