@@ -51,15 +51,28 @@ namespace AutoClientApplication {
         }
 
         private async void GetMonitorResources(string address, string user, string password) {
-            var resources = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password, GetDataAsyncErrorCallback);
-            if (resources != null)
-                AssignNewResources(resources);
+            var resourcesRespond = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password, GetDataAsyncErrorCallback);
+            if (resourcesRespond != null && resourcesRespond.Data != null)
+                AssignNewResources(resourcesRespond.Data);
             System.Threading.Thread.Sleep(refreshRate);
             GetMonitorResources(address, user, password);
         }
 
-        private void AssignNewResources(IRestResponse<ResourcesRespond> resources) {
-            foreach(var m)
+        private async void AssignNewResources(ResourcesRespond resourcesRespond) {
+            foreach (var resource in resourcesRespond.resources) {
+                if (allResources.Count == 0 || !allResources.Exists(x => x.id == resource.id)) {
+                    allResources.Add(new Resources() {
+                        id = resource.id,
+                        name = resource.name,
+                        description = resource.description,
+                        measurements = await GetMonitorMeasurements(resource.measurements)
+                    });
+                }
+            }
+        }
+
+        private async void GetMonitorMeasurements() {
+
         }
 
         private void GetDataAsyncErrorCallback(string errorMessage) {
