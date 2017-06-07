@@ -13,7 +13,7 @@ namespace AutoClientApplication {
 
         private const string DEFAULT_MONITOR_FILENAME = "Monitors.dat";
 
-        private const string NEW_EMPTY_MONITOR_NAME = "-> Write Address Here <-";
+        private const string DEFAULT_MONITOR_HOST = "http://localhost:8000";
 
         private List<Resources> allResources = new List<Resources>();
 
@@ -55,26 +55,30 @@ namespace AutoClientApplication {
             DownloadDataFromAllMonitors();
         }
 
-        private void DownloadDataFromAllMonitors() {
-            for (int monitorIndex = 0; monitorIndex < monitorsGridView.RowCount; monitorIndex++)
-                GetMonitorResources(GetMonitorAddress(monitorIndex), GetMonitorUser(monitorIndex), GetMonitorPassword(monitorIndex));
-        }
-
-        private async void GetMonitorResources(string address, string user, string password) {
+        private async void DownloadDataFromAllMonitors() {
             allResources.Clear();
             allTopResources.Clear();
             top10Machines.Rows.Clear();
-            var resourcesRespond = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password, null, GetDataAsyncErrorCallback);
-            lastUpdateTime.Text = DateTime.Now.ToString();
-            if (resourcesRespond != null && resourcesRespond.Data.resources != null) {
-                var allResources = await GetAllResources(address, resourcesRespond.Data, user, password);
+            for (int monitorIndex = 0; monitorIndex < monitorsGridView.RowCount; monitorIndex++) {
+                var newResources = await GetMonitorResources(GetMonitorAddress(monitorIndex), GetMonitorUser(monitorIndex), GetMonitorPassword(monitorIndex));
                 if (isApplicationStopped) return;
-                AddNewResourcesToView(allResources);
+                if (newResources != null && newResources.Count > 0)
+                    allResources.AddRange(newResources);
             }
+            if (allResources != null && allResources.Count > 0)
+                AddNewResourcesToView(allResources);
             if (isApplicationStopped) return;
             await Task.Delay(refreshRate);
             if (isApplicationStopped) return;
-            GetMonitorResources(address, user, password);
+            DownloadDataFromAllMonitors();
+        }
+
+        private async Task<List<Resources>> GetMonitorResources(string address, string user, string password) {
+            var resourcesRespond = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password, null, GetDataAsyncErrorCallback);
+            lastUpdateTime.Text = DateTime.Now.ToString();
+            if (resourcesRespond != null && resourcesRespond.Data.resources != null && resourcesRespond.Data.resources.Count > 0) 
+                return await GetAllResources(address, resourcesRespond.Data, user, password);
+            return null;
         }
 
         private void AddNewResourcesToView(List<Resources> resources) {
@@ -111,6 +115,7 @@ namespace AutoClientApplication {
 
         private void SetBiggestMeasurement(List<Measurement> measurements, ref Measurement biggestOverstretchedMeasurement, ref Value biggestValue) {
            foreach (var measurement in measurements) {
+                if (measurement.values == null || measurement.values.Count == 0) continue;
                 var latestValue = measurement.values.OrderByDescending(x => x.timestamp).FirstOrDefault();
                 latestValue.procentageValue = latestValue.value / measurement.maxValue;
                 if (latestValue.procentageValue > biggestValue.procentageValue) {
@@ -121,16 +126,19 @@ namespace AutoClientApplication {
         }
 
         private async Task<List<Resources>> GetAllResources(string address, ResourcesRespond resourcesRespond, string user, string password) {
-                foreach (var resource in resourcesRespond.resources)
-                    if (allResources.Count == 0 || !allResources.Exists(x => x.id == resource.id)) {
-                        allResources.Add(new Resources() {
-                            id = resource.id,
-                            name = resource.name,
-                            description = resource.description,
-                            measurements = await GetMonitorMeasurements(address, resource.measurements, user, password)
-                        });
-                    }
-            return allResources;
+            var newResources = new List<Resources>();
+            foreach (var resource in resourcesRespond.resources) {
+                var newResource = new Resources() {
+                    id = resource.id,
+                    name = resource.name,
+                    description = resource.description,
+                    measurements = await GetMonitorMeasurements(address, resource.measurements, user, password)
+                };
+
+                if (newResource.measurements != null && newResource.measurements.Count > 0)
+                    newResources.Add(newResource);
+            }
+            return newResources;
         }
 
         private async Task<List<Measurement>> GetMonitorMeasurements(string address, List<string> measurementsGuids, string user, string password) {
@@ -138,7 +146,7 @@ namespace AutoClientApplication {
             foreach (var measurementGuid in measurementsGuids) {
                 MeasurementRespond measurementData = await GetMeasurementData(address, measurementGuid, user, password);
                 if (measurementData != null) {
-                    var measuremnt = new Measurement() {
+                    var measurement = new Measurement() {
                         host = measurementData.host,
                         metric = measurementData.metric,
                         unit = measurementData.unit,
@@ -146,7 +154,8 @@ namespace AutoClientApplication {
                         complex = measurementData.complex,
                         values = await GetMeasurementValues(address, measurementData.values, user, password)
                     };
-                    measurements.Add(measuremnt);
+                    if (measurement.values != null && measurement.values.Count > 0)
+                        measurements.Add(measurement);
                 }
             }
             return measurements;
@@ -164,8 +173,8 @@ namespace AutoClientApplication {
             Regex rgx = new Regex(address);
             bool containsAny = rgx.IsMatch(measurementGuid);
             string wsName = containsAny ? rgx.Replace(measurementGuid, "") : measurementGuid;
-            var values = await DataRestDownloader.GetDataAsync<ValueRespond>( wsName, address, user, password, null, GetDataAsyncErrorCallback);
-            return values != null ? values.Data.values : null;
+            var valuesRespond = await DataRestDownloader.GetDataAsync<ValueRespond>( wsName, address, user, password, null, GetDataAsyncErrorCallback);
+            return valuesRespond != null ? valuesRespond.Data.values : null;
         }
 
         private void GetDataAsyncErrorCallback(string errorMessage) {
@@ -237,10 +246,7 @@ namespace AutoClientApplication {
                     row.Cells["MonitorIndex"].Value = (int)row.Cells["MonitorIndex"].Value - 1;
             }
             var monitorAddress = GetMonitorAddress(rowIndex);
-            if (!monitorAddress.Equals(NEW_EMPTY_MONITOR_NAME))
-                AddNewInfo("Monitor deleted: " + monitorAddress);
-            else
-                AddNewInfo("Empty Monitor deleted");
+            AddNewInfo("Monitor deleted: " + monitorAddress);
             monitorsGridView.Rows.RemoveAt(rowIndex);
 
             if (monitorsGridView.Rows.Count == 0) {
@@ -270,13 +276,13 @@ namespace AutoClientApplication {
             var id = monitorsGridView.RowCount - 1;
             var currentRow = monitorsGridView.Rows[id];
             currentRow.Cells["MonitorIndex"].Value = id + 1;
-            currentRow.Cells["MonitorAddress"].Value = NEW_EMPTY_MONITOR_NAME;
-            currentRow.Cells["MonitorUser"].Value = "User";
-            currentRow.Cells["MonitorPassword"].Value = "Password";
+            currentRow.Cells["MonitorAddress"].Value = DEFAULT_MONITOR_HOST;
+            currentRow.Cells["MonitorUser"].Value = "user";
+            currentRow.Cells["MonitorPassword"].Value = "password";
             currentRow.Cells["MonitorDelete"].Value = "X";
             clearMonitorsButton.Enabled = true;
             startButton.Enabled = true;
-            AddNewInfo("New empty monitor added to list: ");
+            AddNewInfo("New default monitor added to list.");
         }
 
         private void AddNewRowToDataGridView(TopResource topResource) {
@@ -294,7 +300,7 @@ namespace AutoClientApplication {
             currentRow.Cells["TopProcentageValue"].Value = topResource.procentageValue;
             currentRow.Cells["TopMaxValue"].Value = topResource.maxValue;
 
-            AddNewInfo("New resource: " + topResource.host + " added to list: ");
+            AddNewInfo("New resource: " + topResource.host + " added to list.");
         }
 
         private string PrepereMonitorAddressesForSave() {
