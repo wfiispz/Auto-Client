@@ -66,9 +66,9 @@
             this.TopMetric = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopBiggestValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopMaxValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TopUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopProcentageValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TopUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.monitorsGridView)).BeginInit();
@@ -432,9 +432,9 @@
             this.TopMetric,
             this.TopBiggestValue,
             this.TopMaxValue,
+            this.TopUnit,
             this.TopProcentageValue,
             this.TopDate,
-            this.TopUnit,
             this.TopId});
             this.top10Machines.Location = new System.Drawing.Point(10, 108);
             this.top10Machines.Name = "top10Machines";
@@ -498,6 +498,11 @@
             this.TopMaxValue.HeaderText = "MaxValue";
             this.TopMaxValue.Name = "TopMaxValue";
             // 
+            // TopUnit
+            // 
+            this.TopUnit.HeaderText = "Unit";
+            this.TopUnit.Name = "TopUnit";
+            // 
             // TopProcentageValue
             // 
             this.TopProcentageValue.HeaderText = "ProcentageValue";
@@ -508,11 +513,6 @@
             this.TopDate.HeaderText = "Date";
             this.TopDate.Name = "TopDate";
             this.TopDate.Width = 110;
-            // 
-            // TopUnit
-            // 
-            this.TopUnit.HeaderText = "Unit";
-            this.TopUnit.Name = "TopUnit";
             // 
             // TopId
             // 
@@ -595,9 +595,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TopMetric;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopBiggestValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopMaxValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TopUnit;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopProcentageValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn TopUnit;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopId;
     }
 }

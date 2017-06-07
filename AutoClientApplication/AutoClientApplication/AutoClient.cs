@@ -297,7 +297,7 @@ namespace AutoClientApplication {
             currentRow.Cells["TopDate"].Value = topResource.dateTime.ToString();
             currentRow.Cells["TopUnit"].Value = topResource.unit;
             currentRow.Cells["TopId"].Value = topResource.id;
-            currentRow.Cells["TopProcentageValue"].Value = topResource.procentageValue;
+            currentRow.Cells["TopProcentageValue"].Value = topResource.procentageValue.ToString("p1");
             currentRow.Cells["TopMaxValue"].Value = topResource.maxValue;
 
             AddNewInfo("New resource: " + topResource.host + " added to list.");
