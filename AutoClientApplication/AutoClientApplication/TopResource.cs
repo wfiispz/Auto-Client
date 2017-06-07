@@ -8,9 +8,11 @@ namespace AutoClientApplication {
         public string name;
         public string description;
         public string host;
-        public MeasurementType metric;
+        public string metric;
         public string unit;
         public float biggestValue;
+        public float procentageValue;
+        public float maxValue;
         public DateTime dateTime;
 
     }

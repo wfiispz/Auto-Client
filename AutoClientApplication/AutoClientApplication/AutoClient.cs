@@ -5,6 +5,7 @@ using static AutoClientApplication.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AutoClientApplication {
 
@@ -66,9 +67,9 @@ namespace AutoClientApplication {
             var resourcesRespond = await DataRestDownloader.GetDataAsync<ResourcesRespond>("resources", address, user, password, null, GetDataAsyncErrorCallback);
             lastUpdateTime.Text = DateTime.Now.ToString();
             if (resourcesRespond != null && resourcesRespond.Data.resources != null) {
-                AssignNewResources(address, resourcesRespond.Data, user, password);
+                var allResources = await GetAllResources(address, resourcesRespond.Data, user, password);
                 if (isApplicationStopped) return;
-                AddNewResourcesToView();
+                AddNewResourcesToView(allResources);
             }
             if (isApplicationStopped) return;
             await Task.Delay(refreshRate);
@@ -76,9 +77,9 @@ namespace AutoClientApplication {
             GetMonitorResources(address, user, password);
         }
 
-        private void AddNewResourcesToView() {
+        private void AddNewResourcesToView(List<Resources> resources) {
             AddNewInfo("New resources added.");
-            AddNewResourcesToDataGridView(GetTopResources(numberOfTop));
+            AddNewResourcesToDataGridView(GetTopResources(resources, numberOfTop));
         }
 
         private void AddNewResourcesToDataGridView(List<TopResource> topResources) {
@@ -86,9 +87,9 @@ namespace AutoClientApplication {
                 AddNewRowToDataGridView(topResource);
         }
 
-        private List<TopResource> GetTopResources(int numberOfResources) {
-            foreach (var resource in allResources) {
-                Value biggestValue = new Value() { value = 0, datatime = new DateTime() };
+        private List<TopResource> GetTopResources(List<Resources> resources, int numberOfResources) {
+            foreach (var resource in resources) {
+                Value biggestValue = new Value() { value = 0, timestamp = new DateTime() };
                 Measurement biggestOverstretchedMeasurement = new Measurement();
                 SetBiggestMeasurement(resource.measurements, ref biggestOverstretchedMeasurement, ref biggestValue);
                 var topResource = new TopResource() {
@@ -99,33 +100,37 @@ namespace AutoClientApplication {
                     metric = biggestOverstretchedMeasurement.metric,
                     unit = biggestOverstretchedMeasurement.unit,
                     biggestValue = biggestValue.value,
-                    dateTime = biggestValue.datatime
+                    dateTime = biggestValue.timestamp,
+                    maxValue = biggestOverstretchedMeasurement.maxValue,
+                    procentageValue = biggestValue.procentageValue
                 };
                 allTopResources.Add(topResource);
             }
-            return allTopResources.OrderByDescending(x => x.biggestValue).Take(numberOfResources).ToList();
+            return allTopResources.OrderByDescending(x => x.procentageValue).Take(numberOfResources).ToList();
         }
 
         private void SetBiggestMeasurement(List<Measurement> measurements, ref Measurement biggestOverstretchedMeasurement, ref Value biggestValue) {
            foreach (var measurement in measurements) {
-                var latestValue = measurement.values.OrderByDescending(x => x.datatime).FirstOrDefault();
-                if (latestValue.value > biggestValue.value) {
+                var latestValue = measurement.values.OrderByDescending(x => x.timestamp).FirstOrDefault();
+                latestValue.procentageValue = latestValue.value / measurement.maxValue;
+                if (latestValue.procentageValue > biggestValue.procentageValue) {
                     biggestValue = latestValue;
                     biggestOverstretchedMeasurement = measurement;
                 }
             }
         }
 
-        private async void AssignNewResources(string address, ResourcesRespond resourcesRespond, string user, string password) {
+        private async Task<List<Resources>> GetAllResources(string address, ResourcesRespond resourcesRespond, string user, string password) {
                 foreach (var resource in resourcesRespond.resources)
                     if (allResources.Count == 0 || !allResources.Exists(x => x.id == resource.id)) {
                         allResources.Add(new Resources() {
                             id = resource.id,
                             name = resource.name,
                             description = resource.description,
-                            measurements = await GetMonitorMeasurements(address, resource.measurementsGuids, user, password)
+                            measurements = await GetMonitorMeasurements(address, resource.measurements, user, password)
                         });
                     }
+            return allResources;
         }
 
         private async Task<List<Measurement>> GetMonitorMeasurements(string address, List<string> measurementsGuids, string user, string password) {
@@ -139,7 +144,7 @@ namespace AutoClientApplication {
                         unit = measurementData.unit,
                         maxValue = measurementData.maxValue,
                         complex = measurementData.complex,
-                        values = await GetMeasurementValues(address, measurementGuid, user, password)
+                        values = await GetMeasurementValues(address, measurementData.values, user, password)
                     };
                     measurements.Add(measuremnt);
                 }
@@ -148,14 +153,19 @@ namespace AutoClientApplication {
         }
 
         private async Task<MeasurementRespond> GetMeasurementData(string address, string measurementGuid, string user, string password) {
-            var measurementRespond = await DataRestDownloader.GetDataAsync<MeasurementRespond>("measurements", address, user, password, measurementGuid, GetDataAsyncErrorCallback);
+            Regex rgx = new Regex(address);
+            bool containsAny = rgx.IsMatch(measurementGuid);
+            string wsName  = containsAny ? rgx.Replace(measurementGuid, "") : measurementGuid;
+            var measurementRespond = await DataRestDownloader.GetDataAsync<MeasurementRespond>(wsName, address, user, password, null, GetDataAsyncErrorCallback);
             return measurementRespond != null ? measurementRespond.Data : null;
         }
 
         private async Task<List<Value>> GetMeasurementValues(string address, string measurementGuid, string user, string password) {
-            var parameter = measurementGuid + "/values";
-            var values = await DataRestDownloader.GetDataAsync<List<Value>>("measurements", address, user, password, parameter, GetDataAsyncErrorCallback);
-            return values != null ? values.Data : null;
+            Regex rgx = new Regex(address);
+            bool containsAny = rgx.IsMatch(measurementGuid);
+            string wsName = containsAny ? rgx.Replace(measurementGuid, "") : measurementGuid;
+            var values = await DataRestDownloader.GetDataAsync<ValueRespond>( wsName, address, user, password, null, GetDataAsyncErrorCallback);
+            return values != null ? values.Data.values : null;
         }
 
         private void GetDataAsyncErrorCallback(string errorMessage) {
@@ -278,9 +288,11 @@ namespace AutoClientApplication {
             currentRow.Cells["TopDescription"].Value = topResource.description;
             currentRow.Cells["TopMetric"].Value = topResource.metric.ToString();
             currentRow.Cells["TopBiggestValue"].Value = topResource.biggestValue;
-            currentRow.Cells["TopDate"].Value = topResource.dateTime.ToShortDateString();
+            currentRow.Cells["TopDate"].Value = topResource.dateTime.ToString();
             currentRow.Cells["TopUnit"].Value = topResource.unit;
             currentRow.Cells["TopId"].Value = topResource.id;
+            currentRow.Cells["TopProcentageValue"].Value = topResource.procentageValue;
+            currentRow.Cells["TopMaxValue"].Value = topResource.maxValue;
 
             AddNewInfo("New resource: " + topResource.host + " added to list: ");
         }

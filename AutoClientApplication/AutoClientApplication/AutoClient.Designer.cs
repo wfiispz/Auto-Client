@@ -23,7 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.logsTextBox = new System.Windows.Forms.RichTextBox();
             this.InfoLabel = new System.Windows.Forms.Label();
             this.startButton = new System.Windows.Forms.Button();
@@ -49,6 +49,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.rateValueLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.SaveTopButton = new System.Windows.Forms.Button();
             this.numberOfTopLabel = new System.Windows.Forms.Label();
             this.numberOfTopElementsTrackBar = new System.Windows.Forms.TrackBar();
             this.label6 = new System.Windows.Forms.Label();
@@ -58,16 +59,17 @@
             this.top10Machines = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.SaveLogsButton = new System.Windows.Forms.Button();
             this.TopIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopHost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopMetric = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopBiggestValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TopMaxValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TopProcentageValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopUnit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.SaveTopButton = new System.Windows.Forms.Button();
-            this.SaveLogsButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.monitorsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.refreshRateTrackBar)).BeginInit();
@@ -295,7 +297,7 @@
             // 
             this.refreshRateTrackBar.Location = new System.Drawing.Point(94, 3);
             this.refreshRateTrackBar.Maximum = 21600;
-            this.refreshRateTrackBar.Minimum = 30;
+            this.refreshRateTrackBar.Minimum = 10;
             this.refreshRateTrackBar.Name = "refreshRateTrackBar";
             this.refreshRateTrackBar.Size = new System.Drawing.Size(626, 45);
             this.refreshRateTrackBar.TabIndex = 9;
@@ -342,6 +344,16 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(798, 332);
             this.panel2.TabIndex = 38;
+            // 
+            // SaveTopButton
+            // 
+            this.SaveTopButton.Location = new System.Drawing.Point(683, 78);
+            this.SaveTopButton.Name = "SaveTopButton";
+            this.SaveTopButton.Size = new System.Drawing.Size(99, 23);
+            this.SaveTopButton.TabIndex = 45;
+            this.SaveTopButton.Text = "Save Top to file";
+            this.SaveTopButton.UseVisualStyleBackColor = true;
+            this.SaveTopButton.Click += new System.EventHandler(this.SaveTopButton_Click);
             // 
             // numberOfTopLabel
             // 
@@ -419,6 +431,8 @@
             this.TopDescription,
             this.TopMetric,
             this.TopBiggestValue,
+            this.TopMaxValue,
+            this.TopProcentageValue,
             this.TopDate,
             this.TopUnit,
             this.TopId});
@@ -436,6 +450,16 @@
             // 
             this.saveFileDialog1.FileName = "NewMonitorFile";
             // 
+            // SaveLogsButton
+            // 
+            this.SaveLogsButton.Location = new System.Drawing.Point(614, 728);
+            this.SaveLogsButton.Name = "SaveLogsButton";
+            this.SaveLogsButton.Size = new System.Drawing.Size(99, 23);
+            this.SaveLogsButton.TabIndex = 46;
+            this.SaveLogsButton.Text = "Save Logs to file";
+            this.SaveLogsButton.UseVisualStyleBackColor = true;
+            this.SaveLogsButton.Click += new System.EventHandler(this.SaveLogsButton_Click);
+            // 
             // TopIndex
             // 
             this.TopIndex.HeaderText = "Index";
@@ -451,8 +475,8 @@
             // 
             // TopDescription
             // 
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.TopDescription.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.TopDescription.DefaultCellStyle = dataGridViewCellStyle1;
             this.TopDescription.FillWeight = 120F;
             this.TopDescription.HeaderText = "Description";
             this.TopDescription.Name = "TopDescription";
@@ -468,6 +492,16 @@
             // 
             this.TopBiggestValue.HeaderText = "BiggestValue";
             this.TopBiggestValue.Name = "TopBiggestValue";
+            // 
+            // TopMaxValue
+            // 
+            this.TopMaxValue.HeaderText = "MaxValue";
+            this.TopMaxValue.Name = "TopMaxValue";
+            // 
+            // TopProcentageValue
+            // 
+            this.TopProcentageValue.HeaderText = "ProcentageValue";
+            this.TopProcentageValue.Name = "TopProcentageValue";
             // 
             // TopDate
             // 
@@ -487,26 +521,6 @@
             this.TopId.ReadOnly = true;
             this.TopId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.TopId.Width = 69;
-            // 
-            // SaveTopButton
-            // 
-            this.SaveTopButton.Location = new System.Drawing.Point(683, 78);
-            this.SaveTopButton.Name = "SaveTopButton";
-            this.SaveTopButton.Size = new System.Drawing.Size(99, 23);
-            this.SaveTopButton.TabIndex = 45;
-            this.SaveTopButton.Text = "Save Top to file";
-            this.SaveTopButton.UseVisualStyleBackColor = true;
-            this.SaveTopButton.Click += new System.EventHandler(this.SaveTopButton_Click);
-            // 
-            // SaveLogsButton
-            // 
-            this.SaveLogsButton.Location = new System.Drawing.Point(614, 728);
-            this.SaveLogsButton.Name = "SaveLogsButton";
-            this.SaveLogsButton.Size = new System.Drawing.Size(99, 23);
-            this.SaveLogsButton.TabIndex = 46;
-            this.SaveLogsButton.Text = "Save Logs to file";
-            this.SaveLogsButton.UseVisualStyleBackColor = true;
-            this.SaveLogsButton.Click += new System.EventHandler(this.SaveLogsButton_Click);
             // 
             // AutoClient
             // 
@@ -573,16 +587,18 @@
         private System.Windows.Forms.Label numberOfTopLabel;
         private System.Windows.Forms.TrackBar numberOfTopElementsTrackBar;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button SaveTopButton;
+        private System.Windows.Forms.Button SaveLogsButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopHost;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopDescription;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopMetric;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopBiggestValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TopMaxValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn TopProcentageValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopUnit;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopId;
-        private System.Windows.Forms.Button SaveTopButton;
-        private System.Windows.Forms.Button SaveLogsButton;
     }
 }
 
