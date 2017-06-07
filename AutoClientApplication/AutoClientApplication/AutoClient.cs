@@ -306,9 +306,9 @@ namespace AutoClientApplication {
         private string PrepereMonitorAddressesForSave() {
             var monitorAddresses = string.Empty;
             foreach (DataGridViewRow row in monitorsGridView.Rows)
-                monitorAddresses += (string)row.Cells["MonitorAddress"].Value + "$" + 
-                                    (string)row.Cells["MonitorUser"].Value + "$" + 
-                                    (string)row.Cells["MonitorPassword"].Value + Environment.NewLine;
+                monitorAddresses += row.Cells["MonitorAddress"].Value.ToString() + "$" + 
+                                    row.Cells["MonitorUser"].Value.ToString() + "$" + 
+                                    row.Cells["MonitorPassword"].Value.ToString() + Environment.NewLine;
             return monitorAddresses;
         }
 
@@ -410,12 +410,13 @@ namespace AutoClientApplication {
         }
 
         private string PrepereTopForSave() {
-            var header = "index,host,description,metric,biggestValue,Date,Unit,id" + Environment.NewLine;
+            var header = "index,host,description,metric,biggestValue,maxValue,procentageValue,date,unit,id" + Environment.NewLine;
             if (top10Machines.Rows.Count > 0) {
                 foreach (DataGridViewRow row in top10Machines.Rows) {
-                    header += (string)row.Cells["TopIndex"].Value + "," + (string)row.Cells["TopHost"].Value + "," + (string)row.Cells["TopDescription"].Value +
-                        (string)row.Cells["TopMetric"].Value + "," + (string)row.Cells["TopBiggestValue"].Value + "," + (string)row.Cells["TopDate"].Value +
-                        (string)row.Cells["TopUnit"].Value + "," + (string)row.Cells["TopId"].Value + Environment.NewLine;
+                    header += row.Cells["TopIndex"].Value.ToString() + "," + row.Cells["TopHost"].Value.ToString() + "," + row.Cells["TopDescription"].Value.ToString() + "," +
+                        row.Cells["TopMetric"].Value.ToString() + "," + row.Cells["TopBiggestValue"].Value.ToString() + "," + row.Cells["TopMaxValue"].Value.ToString() + "," +
+                        row.Cells["TopProcentageValue"].Value.ToString() + "," + row.Cells["TopDate"].Value.ToString() + "," + row.Cells["TopUnit"].Value.ToString() + "," + 
+                        row.Cells["TopId"].Value.ToString() + Environment.NewLine;
                 }
             }
             return header;
