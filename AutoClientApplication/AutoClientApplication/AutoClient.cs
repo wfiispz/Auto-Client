@@ -32,7 +32,7 @@ namespace AutoClientApplication {
         }
 
         private void InitStartOption() {
-            logsTextBox.ReadOnly = true;
+            logsWindowsTextBox.ReadOnly = true;
             directoryLabel.ReadOnly = true;
             top10Machines.ReadOnly = true;
         }
@@ -44,7 +44,7 @@ namespace AutoClientApplication {
         }
 
         private void ClearLogsButton_Click(object sender, EventArgs e) {
-            logsTextBox.Text = "";
+            logsWindowsTextBox.Text = "";
             clearLogsButton.Enabled = false;
         }
 
@@ -188,7 +188,7 @@ namespace AutoClientApplication {
         }
 
         private void AddNewInfo(string info) {
-            logsTextBox.Text += DateTime.Now.ToString("H:mm:ss") + "  -  " + info + Environment.NewLine;
+            logsWindowsTextBox.Text += DateTime.Now.ToString("H:mm:ss") + "  -  " + info + Environment.NewLine;
             clearLogsButton.Enabled = true;
         }
 
@@ -355,7 +355,7 @@ namespace AutoClientApplication {
             allTopResources.Clear();
             top10Machines.Rows.Clear();
             directoryLabel.Text = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + DEFAULT_MONITOR_FILENAME;
-            logsTextBox.Text = "";
+            logsWindowsTextBox.Text = "";
         }
 
         private void AssignUiAfterStartButton() {
@@ -396,7 +396,7 @@ namespace AutoClientApplication {
             saveFileDialog1.FileName = "Logs";
             saveFileDialog1.Filter = "Text files|*.txt";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                File.WriteAllText(saveFileDialog1.FileName, logsTextBox.Text);
+                File.WriteAllText(saveFileDialog1.FileName, logsWindowsTextBox.Text);
         }
 
         private void SaveTopButton_Click(object sender, EventArgs e) {
@@ -420,6 +420,11 @@ namespace AutoClientApplication {
                 }
             }
             return header;
+        }
+
+        private void top10Machines_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

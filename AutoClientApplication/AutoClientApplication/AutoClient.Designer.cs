@@ -57,9 +57,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.top10Machines = new System.Windows.Forms.DataGridView();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.SaveLogsButton = new System.Windows.Forms.Button();
             this.TopIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopHost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -70,6 +67,11 @@
             this.TopProcentageValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.SaveLogsButton = new System.Windows.Forms.Button();
+            this.logsWindowsTextBox = new System.Windows.Forms.RichTextBox();
+            this.LogsWindow = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.monitorsGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.refreshRateTrackBar)).BeginInit();
@@ -86,7 +88,7 @@
             this.logsTextBox.Location = new System.Drawing.Point(15, 757);
             this.logsTextBox.Name = "logsTextBox";
             this.logsTextBox.ReadOnly = true;
-            this.logsTextBox.Size = new System.Drawing.Size(798, 100);
+            this.logsTextBox.Size = new System.Drawing.Size(798, 0);
             this.logsTextBox.TabIndex = 1;
             this.logsTextBox.Text = "";
             // 
@@ -136,12 +138,12 @@
             this.panel1.Controls.Add(this.directoryLabel);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(799, 368);
+            this.panel1.Size = new System.Drawing.Size(799, 334);
             this.panel1.TabIndex = 7;
             // 
             // addMonitor
             // 
-            this.addMonitor.Location = new System.Drawing.Point(479, 189);
+            this.addMonitor.Location = new System.Drawing.Point(479, 156);
             this.addMonitor.Name = "addMonitor";
             this.addMonitor.Size = new System.Drawing.Size(116, 23);
             this.addMonitor.TabIndex = 40;
@@ -164,10 +166,10 @@
             this.MonitorUser,
             this.MonitorPassword,
             this.MonitorDelete});
-            this.monitorsGridView.Location = new System.Drawing.Point(10, 218);
+            this.monitorsGridView.Location = new System.Drawing.Point(18, 185);
             this.monitorsGridView.Name = "monitorsGridView";
             this.monitorsGridView.RowTemplate.Height = 40;
-            this.monitorsGridView.Size = new System.Drawing.Size(772, 134);
+            this.monitorsGridView.Size = new System.Drawing.Size(772, 142);
             this.monitorsGridView.TabIndex = 39;
             this.monitorsGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.MonitorsGridView_CellContentClick_1);
             // 
@@ -206,7 +208,7 @@
             // 
             // SaveMonitorFile
             // 
-            this.SaveMonitorFile.Location = new System.Drawing.Point(222, 189);
+            this.SaveMonitorFile.Location = new System.Drawing.Point(213, 156);
             this.SaveMonitorFile.Name = "SaveMonitorFile";
             this.SaveMonitorFile.Size = new System.Drawing.Size(196, 23);
             this.SaveMonitorFile.TabIndex = 37;
@@ -216,7 +218,7 @@
             // 
             // OpenMonitorFile
             // 
-            this.OpenMonitorFile.Location = new System.Drawing.Point(418, 120);
+            this.OpenMonitorFile.Location = new System.Drawing.Point(418, 111);
             this.OpenMonitorFile.Name = "OpenMonitorFile";
             this.OpenMonitorFile.Size = new System.Drawing.Size(260, 23);
             this.OpenMonitorFile.TabIndex = 36;
@@ -226,7 +228,7 @@
             // 
             // clearMonitorsButton
             // 
-            this.clearMonitorsButton.Location = new System.Drawing.Point(666, 189);
+            this.clearMonitorsButton.Location = new System.Drawing.Point(649, 156);
             this.clearMonitorsButton.Name = "clearMonitorsButton";
             this.clearMonitorsButton.Size = new System.Drawing.Size(116, 23);
             this.clearMonitorsButton.TabIndex = 35;
@@ -248,7 +250,7 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 194);
+            this.label1.Location = new System.Drawing.Point(15, 139);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 13);
             this.label1.TabIndex = 33;
@@ -256,7 +258,7 @@
             // 
             // loadMonitorsButton
             // 
-            this.loadMonitorsButton.Location = new System.Drawing.Point(94, 120);
+            this.loadMonitorsButton.Location = new System.Drawing.Point(99, 111);
             this.loadMonitorsButton.Name = "loadMonitorsButton";
             this.loadMonitorsButton.Size = new System.Drawing.Size(249, 23);
             this.loadMonitorsButton.TabIndex = 31;
@@ -268,7 +270,7 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 69);
+            this.label2.Location = new System.Drawing.Point(15, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 13);
             this.label2.TabIndex = 29;
@@ -277,7 +279,7 @@
             // directoryLabel
             // 
             this.directoryLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.directoryLabel.Location = new System.Drawing.Point(138, 66);
+            this.directoryLabel.Location = new System.Drawing.Point(138, 53);
             this.directoryLabel.Name = "directoryLabel";
             this.directoryLabel.Size = new System.Drawing.Size(644, 20);
             this.directoryLabel.TabIndex = 30;
@@ -285,7 +287,7 @@
             // 
             // clearLogsButton
             // 
-            this.clearLogsButton.Location = new System.Drawing.Point(736, 728);
+            this.clearLogsButton.Location = new System.Drawing.Point(721, 633);
             this.clearLogsButton.Name = "clearLogsButton";
             this.clearLogsButton.Size = new System.Drawing.Size(75, 23);
             this.clearLogsButton.TabIndex = 8;
@@ -295,11 +297,11 @@
             // 
             // refreshRateTrackBar
             // 
-            this.refreshRateTrackBar.Location = new System.Drawing.Point(94, 3);
+            this.refreshRateTrackBar.Location = new System.Drawing.Point(99, 5);
             this.refreshRateTrackBar.Maximum = 21600;
             this.refreshRateTrackBar.Minimum = 10;
             this.refreshRateTrackBar.Name = "refreshRateTrackBar";
-            this.refreshRateTrackBar.Size = new System.Drawing.Size(626, 45);
+            this.refreshRateTrackBar.Size = new System.Drawing.Size(639, 45);
             this.refreshRateTrackBar.TabIndex = 9;
             this.refreshRateTrackBar.Value = 60;
             this.refreshRateTrackBar.Scroll += new System.EventHandler(this.RefreshRateTackBarOnValueChange);
@@ -308,7 +310,7 @@
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 13);
+            this.label3.Location = new System.Drawing.Point(11, 5);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 36;
@@ -320,7 +322,7 @@
             this.rateValueLabel.AutoSize = true;
             this.rateValueLabel.BackColor = System.Drawing.SystemColors.Control;
             this.rateValueLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.rateValueLabel.Location = new System.Drawing.Point(726, 11);
+            this.rateValueLabel.Location = new System.Drawing.Point(744, 5);
             this.rateValueLabel.Name = "rateValueLabel";
             this.rateValueLabel.Size = new System.Drawing.Size(27, 15);
             this.rateValueLabel.TabIndex = 37;
@@ -340,9 +342,9 @@
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.rateValueLabel);
             this.panel2.Controls.Add(this.refreshRateTrackBar);
-            this.panel2.Location = new System.Drawing.Point(12, 386);
+            this.panel2.Location = new System.Drawing.Point(12, 365);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(798, 332);
+            this.panel2.Size = new System.Drawing.Size(798, 267);
             this.panel2.TabIndex = 38;
             // 
             // SaveTopButton
@@ -361,7 +363,7 @@
             this.numberOfTopLabel.AutoSize = true;
             this.numberOfTopLabel.BackColor = System.Drawing.SystemColors.Control;
             this.numberOfTopLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.numberOfTopLabel.Location = new System.Drawing.Point(726, 45);
+            this.numberOfTopLabel.Location = new System.Drawing.Point(744, 33);
             this.numberOfTopLabel.Name = "numberOfTopLabel";
             this.numberOfTopLabel.Size = new System.Drawing.Size(21, 15);
             this.numberOfTopLabel.TabIndex = 44;
@@ -369,11 +371,11 @@
             // 
             // numberOfTopElementsTrackBar
             // 
-            this.numberOfTopElementsTrackBar.Location = new System.Drawing.Point(94, 35);
+            this.numberOfTopElementsTrackBar.Location = new System.Drawing.Point(99, 27);
             this.numberOfTopElementsTrackBar.Maximum = 1000;
             this.numberOfTopElementsTrackBar.Minimum = 1;
             this.numberOfTopElementsTrackBar.Name = "numberOfTopElementsTrackBar";
-            this.numberOfTopElementsTrackBar.Size = new System.Drawing.Size(621, 45);
+            this.numberOfTopElementsTrackBar.Size = new System.Drawing.Size(639, 45);
             this.numberOfTopElementsTrackBar.TabIndex = 43;
             this.numberOfTopElementsTrackBar.Value = 10;
             this.numberOfTopElementsTrackBar.Scroll += new System.EventHandler(this.NumberOfTopElements);
@@ -382,7 +384,7 @@
             // 
             this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 47);
+            this.label6.Location = new System.Drawing.Point(12, 35);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(81, 13);
             this.label6.TabIndex = 42;
@@ -392,7 +394,7 @@
             // 
             this.lastUpdateTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lastUpdateTime.AutoSize = true;
-            this.lastUpdateTime.Location = new System.Drawing.Point(415, 83);
+            this.lastUpdateTime.Location = new System.Drawing.Point(415, 73);
             this.lastUpdateTime.Name = "lastUpdateTime";
             this.lastUpdateTime.Size = new System.Drawing.Size(87, 13);
             this.lastUpdateTime.TabIndex = 41;
@@ -402,7 +404,7 @@
             // 
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(336, 60);
+            this.label5.Location = new System.Drawing.Point(336, 27);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(0, 13);
             this.label5.TabIndex = 40;
@@ -411,7 +413,7 @@
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(206, 83);
+            this.label4.Location = new System.Drawing.Point(210, 73);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 13);
             this.label4.TabIndex = 39;
@@ -439,26 +441,9 @@
             this.top10Machines.Location = new System.Drawing.Point(10, 108);
             this.top10Machines.Name = "top10Machines";
             this.top10Machines.RowTemplate.Height = 40;
-            this.top10Machines.Size = new System.Drawing.Size(772, 217);
+            this.top10Machines.Size = new System.Drawing.Size(780, 124);
             this.top10Machines.TabIndex = 38;
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // saveFileDialog1
-            // 
-            this.saveFileDialog1.FileName = "NewMonitorFile";
-            // 
-            // SaveLogsButton
-            // 
-            this.SaveLogsButton.Location = new System.Drawing.Point(614, 728);
-            this.SaveLogsButton.Name = "SaveLogsButton";
-            this.SaveLogsButton.Size = new System.Drawing.Size(99, 23);
-            this.SaveLogsButton.TabIndex = 46;
-            this.SaveLogsButton.Text = "Save Logs to file";
-            this.SaveLogsButton.UseVisualStyleBackColor = true;
-            this.SaveLogsButton.Click += new System.EventHandler(this.SaveLogsButton_Click);
+            this.top10Machines.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.top10Machines_CellContentClick);
             // 
             // TopIndex
             // 
@@ -522,11 +507,49 @@
             this.TopId.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.TopId.Width = 69;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.FileName = "NewMonitorFile";
+            // 
+            // SaveLogsButton
+            // 
+            this.SaveLogsButton.Location = new System.Drawing.Point(616, 633);
+            this.SaveLogsButton.Name = "SaveLogsButton";
+            this.SaveLogsButton.Size = new System.Drawing.Size(99, 23);
+            this.SaveLogsButton.TabIndex = 46;
+            this.SaveLogsButton.Text = "Save Logs to file";
+            this.SaveLogsButton.UseVisualStyleBackColor = true;
+            this.SaveLogsButton.Click += new System.EventHandler(this.SaveLogsButton_Click);
+            // 
+            // logsWindowsTextBox
+            // 
+            this.logsWindowsTextBox.Location = new System.Drawing.Point(12, 659);
+            this.logsWindowsTextBox.Name = "logsWindowsTextBox";
+            this.logsWindowsTextBox.Size = new System.Drawing.Size(798, 69);
+            this.logsWindowsTextBox.TabIndex = 47;
+            this.logsWindowsTextBox.Text = "";
+            // 
+            // LogsWindow
+            // 
+            this.LogsWindow.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.LogsWindow.AutoSize = true;
+            this.LogsWindow.Location = new System.Drawing.Point(12, 643);
+            this.LogsWindow.Name = "LogsWindow";
+            this.LogsWindow.Size = new System.Drawing.Size(33, 13);
+            this.LogsWindow.TabIndex = 46;
+            this.LogsWindow.Text = "Logs:";
+            // 
             // AutoClient
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(822, 869);
+            this.ClientSize = new System.Drawing.Size(822, 741);
+            this.Controls.Add(this.LogsWindow);
+            this.Controls.Add(this.logsWindowsTextBox);
             this.Controls.Add(this.SaveLogsButton);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.clearLogsButton);
@@ -599,6 +622,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn TopProcentageValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn TopId;
+        private System.Windows.Forms.RichTextBox logsWindowsTextBox;
+        private System.Windows.Forms.Label LogsWindow;
     }
 }
 
